@@ -1,0 +1,23 @@
+body{
+    background-color: black;
+    width: 100vh;
+    height: 100vh;
+}
+#canvas{
+    position: fixed;
+    left: 20px;
+    bottom: 40px;
+    width: 98%;
+    height: 100%;
+}
+audio{
+    position: fixed;
+    padding: 5px;
+    height: 20px;
+    bottom: 10px;
+    z-index: 3;
+}
+#file-input{
+    position: fixed;
+    z-index: 5;
+}
