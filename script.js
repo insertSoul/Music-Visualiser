@@ -1,4 +1,3 @@
-
 window.onload = function() {
     const audio = document.getElementById('audio');
     const file = document.getElementById('file-input')
@@ -24,14 +23,10 @@ window.onload = function() {
 
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
+        console.log(dataArray)
 
         const WIDTH = canvas.width
         const HEIGHT = canvas.height;
-        const barWidth = (WIDTH / bufferLength) * 1.5
-
-        let barHeight;
-
-
         
         function renderFrame() {
             requestAnimationFrame(renderFrame);
@@ -41,13 +36,15 @@ window.onload = function() {
             ctx.fillStyle = "rgba(0,0,0,0.2)";
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-            let bars = 100;
+            let bars = 10;
+            let shapeGrowth;
 
             for (let i = 0; i < bars; i++) {
-                barHeight = (dataArray[i] * 2);
+                shapeGrowth = (dataArray[17]*3);
+                shapeColor = (dataArray[5]*3 )
 
-                ctx.fillStyle = `rgb(${i*dataArray[i]}, ${barHeight}, ${barHeight*2%200})`;
-                ctx.fillRect(WIDTH/3+i*10, 100 +i *5, barHeight + 300, barHeight + 300);
+                ctx.fillStyle = `rgb(${shapeColor%200}, ${shapeColor*5%260}, ${shapeColor**2%130})`;
+                ctx.fillRect(WIDTH/3-shapeGrowth, HEIGHT/2-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
                 
             }
         }
