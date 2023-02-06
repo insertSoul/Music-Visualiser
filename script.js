@@ -38,16 +38,16 @@ window.onload = function() {
 
             analyser.getByteFrequencyData(dataArray);
 
-            ctx.fillStyle = "rgba(0,0,0,0.08)";
+            ctx.fillStyle = "rgba(0,0,0,0.2)";
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-            let bars = 36;
+            let bars = 100;
 
             for (let i = 0; i < bars; i++) {
                 barHeight = (dataArray[i] * 2);
 
-                ctx.fillStyle = `rgb(${i*10}, ${barHeight}, ${barHeight*2%200})`;
-                ctx.fillRect(barHeight*3, barWidth + barHeight, barHeight, barHeight);
+                ctx.fillStyle = `rgb(${i*dataArray[i]}, ${barHeight}, ${barHeight*2%200})`;
+                ctx.fillRect(WIDTH/3+i*10, 100 +i *5, barHeight + 300, barHeight + 300);
                 
             }
         }
