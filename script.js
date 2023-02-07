@@ -29,6 +29,11 @@ window.onload = function() {
         const HEIGHT = canvas.height;
         
         function renderFrame() {
+
+            const sizeSlider = document.getElementById("sliderTest")
+            let sizeSliderOutput = sizeSlider.value;
+            console.log(sizeSliderOutput)
+
             requestAnimationFrame(renderFrame);
 
             analyser.getByteFrequencyData(dataArray);
@@ -36,15 +41,15 @@ window.onload = function() {
             ctx.fillStyle = "rgba(0,0,0,0.2)";
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-            let bars = 10;
+            let bars = 20;
             let shapeGrowth;
 
             for (let i = 0; i < bars; i++) {
-                shapeGrowth = (dataArray[17]*3);
-                shapeColor = (dataArray[5]*3 )
+                shapeGrowth = (dataArray[i]/2 + (sizeSliderOutput/1.3));
+                shapeColor = (dataArray[i]*3 )
 
                 ctx.fillStyle = `rgb(${shapeColor%200}, ${shapeColor*5%260}, ${shapeColor**2%130})`;
-                ctx.fillRect(WIDTH/3-shapeGrowth, HEIGHT/2-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
+                ctx.fillRect(WIDTH/2-shapeGrowth, HEIGHT/2-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
                 
             }
         }
@@ -53,4 +58,6 @@ window.onload = function() {
     }
 }
 
-
+const sizeSlider = document.getElementById("sliderTest")
+let sizeSliderOutput = sizeSlider.value;
+console.log(sizeSliderOutput)

@@ -21,3 +21,9 @@ audio{
     position: fixed;
     z-index: 5;
 }
+#sliderTest{
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 350px
+}
