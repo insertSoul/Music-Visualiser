@@ -25,14 +25,16 @@ window.onload = function() {
         const dataArray = new Uint8Array(bufferLength);
         console.log(dataArray)
 
-        const WIDTH = canvas.width
+        const WIDTH = canvas.width;
         const HEIGHT = canvas.height;
+
+        const sizeSlider = document.getElementById("sliderSize");
+        const colourSlider = document.getElementById("sliderColour");
         
         function renderFrame() {
 
-            const sizeSlider = document.getElementById("sliderTest")
             let sizeSliderOutput = sizeSlider.value;
-            console.log(sizeSliderOutput)
+            let colourSliderOutput = colourSlider.value;
 
             requestAnimationFrame(renderFrame);
 
@@ -41,14 +43,15 @@ window.onload = function() {
             ctx.fillStyle = "rgba(0,0,0,0.2)";
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-            let bars = 20;
+            let bars = 50;
             let shapeGrowth;
 
             for (let i = 0; i < bars; i++) {
-                shapeGrowth = (dataArray[i]/2 + (sizeSliderOutput/1.3));
-                shapeColor = (dataArray[i]*3 )
+                shapeGrowth = (dataArray[i]/2 + (sizeSliderOutput*1.7));
+                shapeColor = (colourSliderOutput);
+                shapeSaturation = (50 +(dataArray[i])%50);
 
-                ctx.fillStyle = `rgb(${shapeColor%200}, ${shapeColor*5%260}, ${shapeColor**2%130})`;
+                ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
                 ctx.fillRect(WIDTH/2-shapeGrowth, HEIGHT/2-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
                 
             }
@@ -57,7 +60,3 @@ window.onload = function() {
         renderFrame();
     }
 }
-
-const sizeSlider = document.getElementById("sliderTest")
-let sizeSliderOutput = sizeSlider.value;
-console.log(sizeSliderOutput)
