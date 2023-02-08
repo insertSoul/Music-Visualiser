@@ -32,5 +32,10 @@ audio{
     z-index: 5;
     bottom: 20px;
     left: 500px
-
+}
+#attenuator{
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 650px
 }

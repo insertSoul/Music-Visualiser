@@ -30,11 +30,14 @@ window.onload = function() {
 
         const sizeSlider = document.getElementById("sliderSize");
         const colourSlider = document.getElementById("sliderColour");
+        const attenuator = document.getElementById("attenuator");
+
         
         function renderFrame() {
 
             let sizeSliderOutput = sizeSlider.value;
             let colourSliderOutput = colourSlider.value;
+            let attenuatorOutput = attenuator.value/20;
 
             requestAnimationFrame(renderFrame);
 
@@ -47,9 +50,9 @@ window.onload = function() {
             let shapeGrowth;
 
             for (let i = 0; i < bars; i++) {
-                shapeGrowth = (dataArray[i]/2 + (sizeSliderOutput*1.7));
+                shapeGrowth = (dataArray[i]*attenuatorOutput + (sizeSliderOutput*1.7));
                 shapeColor = (colourSliderOutput);
-                shapeSaturation = (50 +(dataArray[i])%50);
+                shapeSaturation = (30+attenuatorOutput +(dataArray[i])%50);
 
                 ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
                 ctx.fillRect(WIDTH/2-shapeGrowth, HEIGHT/2-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
