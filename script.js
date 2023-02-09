@@ -56,7 +56,30 @@ window.onload = function() {
 
                 ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
                 ctx.fillRect(WIDTH/2-shapeGrowth, HEIGHT/2-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
-                
+            }
+            for (let i = 0; i < bars; i++) {
+                shapeGrowth = (dataArray[i]*attenuatorOutput + (sizeSliderOutput*1.7));
+                shapeColor = (colourSliderOutput);
+                shapeSaturation = (30+attenuatorOutput +(dataArray[i])%50);
+
+                ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
+                ctx.fillRect(WIDTH/3-shapeGrowth, HEIGHT/3-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
+            }
+            for (let i = 0; i < bars; i++) {
+                shapeGrowth = (dataArray[i]*attenuatorOutput + (sizeSliderOutput*1.7));
+                shapeColor = (colourSliderOutput);
+                shapeSaturation = (30+attenuatorOutput +(dataArray[i])%50);
+
+                ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
+                ctx.fillRect(WIDTH/5-shapeGrowth, HEIGHT/7-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
+            }
+            for (let i = 0; i < bars; i++) {
+                shapeGrowth = (dataArray[i]*attenuatorOutput + (sizeSliderOutput*1.7));
+                shapeColor = (colourSliderOutput);
+                shapeSaturation = (30+attenuatorOutput +(dataArray[i])%50);
+
+                ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
+                ctx.fillRect(WIDTH-shapeGrowth, HEIGHT-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
             }
         }
         audio.play();
