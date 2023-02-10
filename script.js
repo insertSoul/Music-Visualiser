@@ -31,6 +31,7 @@ window.onload = function() {
         const sizeSlider = document.getElementById("sliderSize");
         const colourSlider = document.getElementById("sliderColour");
         const attenuator = document.getElementById("attenuator");
+        const attenuatorBars = document.getElementById("attenuatorBars")
 
         
         function renderFrame() {
@@ -38,6 +39,7 @@ window.onload = function() {
             let sizeSliderOutput = sizeSlider.value;
             let colourSliderOutput = colourSlider.value;
             let attenuatorOutput = attenuator.value/20;
+            let barsOutput = attenuatorBars.value
 
             requestAnimationFrame(renderFrame);
 
@@ -46,43 +48,23 @@ window.onload = function() {
             ctx.fillStyle = "rgba(0,0,0,0.2)";
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-            let bars = 50;
-            let shapeGrowth;
-
-            for (let i = 0; i < bars; i++) {
-                shapeGrowth = (dataArray[i]*attenuatorOutput + (sizeSliderOutput*1.7));
-                shapeColor = (colourSliderOutput);
-                shapeSaturation = (30+attenuatorOutput +(dataArray[i])%50);
-
-                ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
-                ctx.fillRect(WIDTH/2-shapeGrowth, HEIGHT/2-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
-            }
-            for (let i = 0; i < bars; i++) {
-                shapeGrowth = (dataArray[i]*attenuatorOutput + (sizeSliderOutput*1.7));
-                shapeColor = (colourSliderOutput);
-                shapeSaturation = (30+attenuatorOutput +(dataArray[i])%50);
-
-                ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
-                ctx.fillRect(WIDTH/3-shapeGrowth, HEIGHT/3-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
-            }
-            for (let i = 0; i < bars; i++) {
-                shapeGrowth = (dataArray[i]*attenuatorOutput + (sizeSliderOutput*1.7));
-                shapeColor = (colourSliderOutput);
-                shapeSaturation = (30+attenuatorOutput +(dataArray[i])%50);
-
-                ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
-                ctx.fillRect(WIDTH/5-shapeGrowth, HEIGHT/7-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
-            }
-            for (let i = 0; i < bars; i++) {
-                shapeGrowth = (dataArray[i]*attenuatorOutput + (sizeSliderOutput*1.7));
-                shapeColor = (colourSliderOutput);
-                shapeSaturation = (30+attenuatorOutput +(dataArray[i])%50);
-
-                ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation)%360}, ${shapeSaturation}%, ${50}%)`;
-                ctx.fillRect(WIDTH-shapeGrowth, HEIGHT-shapeGrowth, shapeGrowth *1.5, shapeGrowth *1.5);
-            }
+            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT)
+            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput+60, ctx, WIDTH/2, HEIGHT);
+            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput+20, ctx, WIDTH/0.65, HEIGHT);
         }
         audio.play();
         renderFrame();
     }
 }
+function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT) {
+    for (let i = 0; i < barsOutput; i++) {
+        shapeGrowth = (dataArray[i] * attenuatorOutput + (sizeSliderOutput * 1.7));
+        shapeColor = (colourSliderOutput);
+        shapeSaturation = (30 + attenuatorOutput + (dataArray[i]) % 50);
+
+        ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${50}%)`;
+        ctx.fillRect(WIDTH / 2 - shapeGrowth, HEIGHT / 2 - shapeGrowth, shapeGrowth * 1.5, shapeGrowth * 1.5);
+    }
+    return shapeGrowth;
+}
+
