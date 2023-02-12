@@ -29,30 +29,30 @@ window.onload = function() {
         const WIDTH = canvas.width;
         const HEIGHT = canvas.height;
 
-        const sizeSlider = document.getElementById("sliderSize");
-        const colourSlider = document.getElementById("sliderColour");
-        const attenuator = document.getElementById("attenuator");
-        const attenuatorBars = document.getElementById("attenuatorBars");
-
-
         const xRepeatButton = document.querySelector("#xRepeatButton");
         xRepeatButton.addEventListener('click', () => {changeButtonStateX(xButtonState)});
         const yRepeatButton = document.querySelector("#yRepeatButton");
         yRepeatButton.addEventListener('click', () => {changeButtonStateY(yButtonState)});
 
+        const sizeSlider = document.getElementById("sliderSize");
+        const colourSlider = document.getElementById("sliderColour");
+        const attenuator = document.getElementById("attenuator");
+        const attenuatorBars = document.getElementById("attenuatorBars");
+        const fadeTime = document.getElementById("fadeTime")
         
         function renderFrame() {
 
             let sizeSliderOutput = sizeSlider.value;
             let colourSliderOutput = colourSlider.value;
             let attenuatorOutput = attenuator.value/20;
-            let barsOutput = attenuatorBars.value
+            let barsOutput = attenuatorBars.value;
+            let fadeTimeOutput = (fadeTime.value)/100;
 
             requestAnimationFrame(renderFrame);
 
             analyser.getByteFrequencyData(dataArray);
 
-            ctx.fillStyle = "rgba(0,0,0,0.2)";
+            ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
             drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT)

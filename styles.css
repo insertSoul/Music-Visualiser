@@ -57,3 +57,9 @@ audio{
     bottom: 20px;
     left: 1020px;
 }
+#fadeTime{
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 1100px;
+}
