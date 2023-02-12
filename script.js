@@ -4,6 +4,7 @@ window.onload = function() {
     const canvas = document.getElementById('canvas')
 
 
+
     file.onchange = function() {
         const files = this.files;
         console.log('FILES[0]: ', files[0])
@@ -31,7 +32,12 @@ window.onload = function() {
         const sizeSlider = document.getElementById("sliderSize");
         const colourSlider = document.getElementById("sliderColour");
         const attenuator = document.getElementById("attenuator");
-        const attenuatorBars = document.getElementById("attenuatorBars")
+        const attenuatorBars = document.getElementById("attenuatorBars");
+
+
+        const xRepeatButton = document.querySelector("#xRepeatButton");
+        xRepeatButton.addEventListener('click', () => {changeButtonState(xButtonState)});
+
 
         
         function renderFrame() {
@@ -48,9 +54,7 @@ window.onload = function() {
             ctx.fillStyle = "rgba(0,0,0,0.2)";
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT)
-            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput+60, ctx, WIDTH/2, HEIGHT);
-            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput+20, ctx, WIDTH/0.65, HEIGHT);
+            drawShapes (xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT)
         }
         audio.play();
         renderFrame();
@@ -67,4 +71,55 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
     }
     return shapeGrowth;
 }
+const xButtonState = {value: 1};
+function changeButtonState(initialButtonState) {
+    if (initialButtonState.value == 5) {
+        return initialButtonState.value = 1;
+    } else {
+        return initialButtonState.value++;
+    }
+}
 
+function drawShapes (xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT) {
+    for (let i=1; i <= xButtonState.value; i++) {
+        if ( xButtonState.value == 1) {
+            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT)
+        } else if (xButtonState.value ==2) {
+            if (i==1){
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, ((WIDTH + (WIDTH/2) - sizeSliderOutput/2) - sizeSliderOutput/2), HEIGHT)
+            } else {
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, ((WIDTH/2) -sizeSliderOutput/2), HEIGHT)
+            }
+        } else if (xButtonState.value == 3) {
+            if (i==1){
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT)
+            } else if (i==2){
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, ((WIDTH + (2*WIDTH/3)) - sizeSliderOutput/2), HEIGHT)
+            } else { 
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, ((WIDTH/3) -sizeSliderOutput/2), HEIGHT)
+            }
+        } else if (xButtonState.value == 4) {
+            if (i==1){
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx,((WIDTH/4) - sizeSliderOutput/2) , HEIGHT)
+            } else if (i==2){
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx,((WIDTH + WIDTH/4) -sizeSliderOutput/2), HEIGHT)
+            } else if (i==3){ 
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx,((3*WIDTH/4) -sizeSliderOutput/2), HEIGHT)
+            } else { 
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx,(WIDTH +(3*WIDTH/4) -sizeSliderOutput/2), HEIGHT)
+            }
+        } else if (xButtonState.value == 5) {
+            if (i==1){
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx, WIDTH, HEIGHT)
+            } else if (i==2){
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx,((WIDTH/5) - sizeSliderOutput/2) , HEIGHT)
+            } else if (i==3){
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx,((WIDTH + (2*WIDTH)/5) -sizeSliderOutput/2), HEIGHT)
+            } else if (i==4){ 
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx,((3*WIDTH/5) -sizeSliderOutput/2), HEIGHT)
+            } else { 
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, ctx,(WIDTH +(4*WIDTH/5) -sizeSliderOutput/2), HEIGHT)
+            }
+        }
+    }
+}
