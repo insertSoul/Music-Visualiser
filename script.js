@@ -30,9 +30,11 @@ window.onload = function() {
         const HEIGHT = canvas.height;
 
         const xRepeatButton = document.querySelector("#xRepeatButton");
-        xRepeatButton.addEventListener('click', () => {changeButtonStateX(xButtonState)});
+        xRepeatButton.addEventListener('click', () => {changeButtonState(xButtonState)});
         const yRepeatButton = document.querySelector("#yRepeatButton");
-        yRepeatButton.addEventListener('click', () => {changeButtonStateY(yButtonState)});
+        yRepeatButton.addEventListener('click', () => {changeButtonState(yButtonState)});
+        const modifyButton = document.querySelector("#modifyButton");
+        modifyButton.addEventListener('click', () => {changeButtonState(modifyState)});
 
         const sizeSlider = document.getElementById("sliderSize");
         const colourSlider = document.getElementById("sliderColour");
@@ -57,104 +59,127 @@ window.onload = function() {
             ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-            drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT)
+            drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT)
         }
         audio.play();
         renderFrame();
     }
 }
-function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT) {
+function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT) {
     for (let i = 0; i < barsOutput; i++) {
         shapeGrowth = (dataArray[i] * attenuatorOutput + (sizeSliderOutput * 1.7));
         shapeColor = (colourSliderOutput);
         shapeSaturation = (30 + attenuatorOutput + (dataArray[i]) % 80);
         
-        ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${60}%)`;
+        if (modifyState.value == 1) {
+            ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${60}%)`;
+            ctx.beginPath();
+            ctx.roundRect(WIDTH / 2 - shapeGrowth, HEIGHT / 2 - shapeGrowth, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+            ctx.fill();
+        } else if (modifyState.value == 2) {
+            ctx.fillStyle = `hsl(${(i*shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${60}%)`;
+            ctx.beginPath();
+            ctx.roundRect(WIDTH / 2 - shapeGrowth, HEIGHT / 2 - shapeGrowth, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+            ctx.fill();
+        } else if (modifyState.value == 3) {
+            ctx.fillStyle = `hsl(${(i*shapeColor + i**2) % 360}, ${shapeSaturation+5*i}%, ${70}%)`;
+            ctx.beginPath();
+            ctx.roundRect(WIDTH / 2 - shapeGrowth * i, HEIGHT / 2 - shapeGrowth + 10*i, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+            ctx.fill();
+        } else {
+            ctx.fillStyle = `hsl(${(i * dataArray[i]) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
+            ctx.beginPath();
+            ctx.roundRect(WIDTH / 2 *i - shapeGrowth * i, HEIGHT / 2 - shapeGrowth + 10*i, shapeGrowth * 2, shapeGrowth * 2 *dataArray[i], roundnessOutput);
+            ctx.fill();
+        }
+
         ctx.beginPath();
-        ctx.roundRect(WIDTH / 2 - shapeGrowth, HEIGHT / 2 - shapeGrowth, shapeGrowth * 1.5, shapeGrowth * 1.5, roundnessOutput);
+        ctx.roundRect(WIDTH / 2 - shapeGrowth, HEIGHT / 2 - shapeGrowth, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
         ctx.fill();
     }
-    return shapeGrowth;
+    //return shapeGrowth;
 }
-const xButtonState = {value: 1};
-function changeButtonStateX(initialButtonState) {
-    if (initialButtonState.value == 5) {
-        return initialButtonState.value = 1;
+const xButtonState = {value: 1, max:5};
+const yButtonState = {value: 1, max:3};
+const modifyState = {value: 1, max:4}
+
+
+function changeButtonState(buttonState) {
+    if (buttonState.value == buttonState.max) {
+        return buttonState.value = 1;
     } else {
-        return initialButtonState.value++;
-    }
-}
-const yButtonState = {value: 1};
-function changeButtonStateY(initialButtonState) {
-    if (initialButtonState.value == 3) {
-        return initialButtonState.value = 1;
-    } else {
-        return initialButtonState.value++;
+        console.log(buttonState)
+        return buttonState.value++;
+        
     }
 }
 
-function drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT) {
-    for (let i = 1 ; i <= yButtonState.value; i++) {
+function drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT) {
+    repeatInY(yButtonState, xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT);
+}
+
+function repeatInY(yButtonState, xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT) {
+    for (let i = 1; i <= yButtonState.value; i++) {
         if (yButtonState.value == 1) {
-            RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT);
-        } else if(yButtonState.value == 2) {
-            if(i == 1) {
-                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, ((HEIGHT + HEIGHT / 2) - sizeSliderOutput / 2));
+            RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT);
+        } else if (yButtonState.value == 2) {
+            if (i == 1) {
+                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, ((HEIGHT + HEIGHT / 2) - sizeSliderOutput / 2));
             } else if (i = 2) {
-                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, (HEIGHT / 2) - sizeSliderOutput / 2);
+                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, (HEIGHT / 2) - sizeSliderOutput / 2);
             }
         } else if (yButtonState.value == 3) {
             if (i == 1) {
-                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT);
+                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT);
             } else if (i == 2) {
-                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, ((HEIGHT + (2 * HEIGHT / 3)) - sizeSliderOutput / 2));
+                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, ((HEIGHT + (2 * HEIGHT / 3)) - sizeSliderOutput / 2));
             } else if (i == 3) {
-                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, ((HEIGHT /3) - sizeSliderOutput /2))
+                RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, ((HEIGHT / 3) - sizeSliderOutput / 2));
             }
 
         }
     }
 }
 
-function RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT) {
+function RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT) {
     for (let i = 1; i <= xButtonState.value; i++) {
         if (xButtonState.value == 1) {
-            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT);
+            drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT);
         } else if (xButtonState.value == 2) {
             if (i == 1) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((WIDTH + (WIDTH / 2) - sizeSliderOutput / 2) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((WIDTH + (WIDTH / 2) - sizeSliderOutput / 2) - sizeSliderOutput / 2), HEIGHT);
             } else {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((WIDTH / 2) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((WIDTH / 2) - sizeSliderOutput / 2), HEIGHT);
             }
         } else if (xButtonState.value == 3) {
             if (i == 1) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT);
             } else if (i == 2) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((WIDTH + (2 * WIDTH / 3)) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((WIDTH + (2 * WIDTH / 3)) - sizeSliderOutput / 2), HEIGHT);
             } else {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((WIDTH / 3) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((WIDTH / 3) - sizeSliderOutput / 2), HEIGHT);
             }
         } else if (xButtonState.value == 4) {
             if (i == 1) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
             } else if (i == 2) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((WIDTH + WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((WIDTH + WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
             } else if (i == 3) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((3 * WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((3 * WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
             } else {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, (WIDTH + (3 * WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, (WIDTH + (3 * WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
             }
         } else if (xButtonState.value == 5) {
             if (i == 1) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, WIDTH, HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT);
             } else if (i == 2) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((WIDTH / 5) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((WIDTH / 5) - sizeSliderOutput / 2), HEIGHT);
             } else if (i == 3) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((WIDTH + (2 * WIDTH) / 5) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((WIDTH + (2 * WIDTH) / 5) - sizeSliderOutput / 2), HEIGHT);
             } else if (i == 4) {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, ((3 * WIDTH / 5) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, ((3 * WIDTH / 5) - sizeSliderOutput / 2), HEIGHT);
             } else {
-                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, ctx, (WIDTH + (4 * WIDTH / 5) - sizeSliderOutput / 2), HEIGHT);
+                drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, (WIDTH + (4 * WIDTH / 5) - sizeSliderOutput / 2), HEIGHT);
             }
         }
     }
