@@ -86,10 +86,17 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
             ctx.beginPath();
             ctx.roundRect(WIDTH / 2 - shapeGrowth * i, HEIGHT / 2 - shapeGrowth + 10*i, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
             ctx.fill();
-        } else {
-            ctx.fillStyle = `hsl(${(i * dataArray[i]) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
+        } else if (modifyState.value == 4) {
+            ctx.fillStyle = `hsl(${(shapeColor + (dataArray[i]% 40) /i) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
             ctx.beginPath();
-            ctx.roundRect(WIDTH / 2 *i - shapeGrowth * i, HEIGHT / 2 - shapeGrowth + 10*i, shapeGrowth * 2, shapeGrowth * 2 *dataArray[i], roundnessOutput);
+            ctx.roundRect(WIDTH / 2 - shapeGrowth * i + i, HEIGHT / 2 - shapeGrowth + 2**i - i, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+            ctx.roundRect(WIDTH / 2 - shapeGrowth * -i - i, HEIGHT / 2 - shapeGrowth + 2**i - i, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+
+            ctx.fill();
+        } else {
+            ctx.fillStyle = `hsl(${(shapeColor + dataArray[5*i]%130) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
+            ctx.beginPath();
+            ctx.roundRect(WIDTH / 2 - (shapeGrowth +dataArray[i]%400) + 10*i, HEIGHT / 2 - (shapeGrowth +(dataArray[i]%400) + 10*i), (shapeGrowth * 2) + dataArray[i] %100, shapeGrowth * 2 + dataArray[i] %100, roundnessOutput);
             ctx.fill();
         }
 
@@ -101,7 +108,7 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
 }
 const xButtonState = {value: 1, max:5};
 const yButtonState = {value: 1, max:3};
-const modifyState = {value: 1, max:4}
+const modifyState = {value: 1, max:5}
 
 
 function changeButtonState(buttonState) {
