@@ -93,22 +93,22 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
             ctx.roundRect(WIDTH / 2 - shapeGrowth * -i - i, HEIGHT / 2 - shapeGrowth + 2**i - i, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
 
             ctx.fill();
-        } else {
+        } else if (modifyState.value == 5) {
             ctx.fillStyle = `hsl(${(shapeColor + dataArray[5*i]%130) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
             ctx.beginPath();
             ctx.roundRect(WIDTH / 2 - (shapeGrowth +dataArray[i]%400) + 10*i, HEIGHT / 2 - (shapeGrowth +(dataArray[i]%400) + 10*i), (shapeGrowth * 2) + dataArray[i] %100, shapeGrowth * 2 + dataArray[i] %100, roundnessOutput);
             ctx.fill();
+        } else {
+            ctx.fillStyle = `hsl(${(shapeColor + dataArray[i]%160) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
+            ctx.beginPath();
+            ctx.roundRect(WIDTH / 2 - (shapeGrowth) + 10*i, HEIGHT / 2 - (shapeGrowth) + 10*i, (shapeGrowth * 2) + dataArray[i] %50, shapeGrowth * 2, roundnessOutput)
+            ctx.fill();
         }
-
-        ctx.beginPath();
-        ctx.roundRect(WIDTH / 2 - shapeGrowth, HEIGHT / 2 - shapeGrowth, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
-        ctx.fill();
     }
-    //return shapeGrowth;
 }
 const xButtonState = {value: 1, max:5};
 const yButtonState = {value: 1, max:3};
-const modifyState = {value: 1, max:5}
+const modifyState = {value: 1, max:6}
 
 
 function changeButtonState(buttonState) {
