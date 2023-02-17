@@ -76,3 +76,9 @@ audio{
     bottom: 20px;
     left: 1400px
 }
+#blendButton{
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 1460px;
+}

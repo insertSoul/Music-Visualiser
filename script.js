@@ -20,7 +20,7 @@ window.onload = function() {
     
         src.connect(analyser);
         analyser.connect(audioCtx.destination);
-        analyser.fftSize = 64;
+        analyser.fftSize = 32;
 
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
@@ -30,11 +30,14 @@ window.onload = function() {
         const HEIGHT = canvas.height;
 
         const xRepeatButton = document.querySelector("#xRepeatButton");
-        xRepeatButton.addEventListener('click', () => {changeButtonState(xButtonState)});
         const yRepeatButton = document.querySelector("#yRepeatButton");
-        yRepeatButton.addEventListener('click', () => {changeButtonState(yButtonState)});
         const modifyButton = document.querySelector("#modifyButton");
+        const blendButton = document.querySelector('#blendButton')
+        xRepeatButton.addEventListener('click', () => {changeButtonState(xButtonState)});
+        yRepeatButton.addEventListener('click', () => {changeButtonState(yButtonState)});
         modifyButton.addEventListener('click', () => {changeButtonState(modifyState)});
+        blendButton.addEventListener('click', () => {changeButtonState(blendState)});
+
 
         const sizeSlider = document.getElementById("sliderSize");
         const colourSlider = document.getElementById("sliderColour");
@@ -57,8 +60,9 @@ window.onload = function() {
             analyser.getByteFrequencyData(dataArray);
             ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
+            
             drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT)
+            ctx.globalCompositeOperation = "source-over";
         }
         audio.play();
         renderFrame();
@@ -75,7 +79,6 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
             ctx.beginPath();
             ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth), Math.floor(HEIGHT / 2 - shapeGrowth), Math.floor(shapeGrowth * 2), Math.floor(shapeGrowth * 2), roundnessOutput);
             ctx.fill();
-            ctx.globalCompositeOperation = "color-burn";
         } else if (modifyState.value == 2) {
             ctx.fillStyle = `hsla(${(i*shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${60}%, ${90}%)`;
             ctx.beginPath();
@@ -83,16 +86,15 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
             ctx.fill();
 
         } else if (modifyState.value == 3) {
-            ctx.fillStyle = `hsla(${(i*shapeColor + i**2) % 360}, ${shapeSaturation+5*i}%, ${70}%, ${90}%)`;
+            ctx.fillStyle = `hsla(${(i*shapeColor + i**2) % 360}, ${shapeSaturation+5*i}%, ${50}%, ${90}%)`;
             ctx.beginPath();
-            ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth * i), Math.floor(HEIGHT / 2 - shapeGrowth + 10*i), Math.floor(shapeGrowth * 2, shapeGrowth * 2), roundnessOutput);
+            ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth * i), Math.floor(HEIGHT / 2 - shapeGrowth + 10*i), Math.floor(shapeGrowth * 2), Math.floor(shapeGrowth * 2), roundnessOutput);
             ctx.fill();
         } else if (modifyState.value == 4) {
             ctx.fillStyle = `hsla(${(shapeColor + (dataArray[i]% 40) /i) % 360}, ${shapeSaturation+5*i}%, ${50}%, ${90}%)`;
             ctx.beginPath();
             ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth * i + i), Math.floor(HEIGHT / 2 - shapeGrowth + 2**i - i), Math.floor(shapeGrowth * 2), Math.floor(shapeGrowth * 2), roundnessOutput);
             ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth * -i - i), Math.floor(HEIGHT / 2 - shapeGrowth + 2**i - i), Math.floor(shapeGrowth * 2), Math.floor(shapeGrowth * 2), roundnessOutput);
-
             ctx.fill();
         } else if (modifyState.value == 5) {
             ctx.fillStyle = `hsla(${(shapeColor + dataArray[5*i]%130) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
@@ -110,6 +112,7 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
 const xButtonState = {value: 1, max:5};
 const yButtonState = {value: 1, max:3};
 const modifyState = {value: 1, max:6}
+const blendState = {value: 1, max:3}
 
 
 function changeButtonState(buttonState) {
@@ -122,8 +125,20 @@ function changeButtonState(buttonState) {
     }
 }
 
+function changeBlendMode(blendState , ctx){
+    if (blendState.value == 1) {
+        return ctx.globalCompositeOperation = "source-over"
+    } else if (blendState.value == 2) {
+        return ctx.globalCompositeOperation = "color-burn"
+    } else {
+        return ctx.globalCompositeOperation = "difference"
+    }
+}
+
 function drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT) {
     repeatInY(yButtonState, xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT);
+    //changeBlendMode(blendState, ctx);
+
 }
 
 function repeatInY(yButtonState, xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT) {
@@ -144,9 +159,9 @@ function repeatInY(yButtonState, xButtonState, barsOutput, dataArray, attenuator
             } else if (i == 3) {
                 RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, ((HEIGHT / 3) - sizeSliderOutput / 2));
             }
-
-        }
-    }
+        } 
+        changeBlendMode(blendState, ctx);
+    } 
 }
 
 function RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, WIDTH, HEIGHT) {
@@ -190,5 +205,6 @@ function RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSl
                 drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState,  ctx, (WIDTH + (4 * WIDTH / 5) - sizeSliderOutput / 2), HEIGHT);
             }
         }
-    }
+    } 
+    changeBlendMode(blendState, ctx);
 }
