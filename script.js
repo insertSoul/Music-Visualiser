@@ -7,7 +7,6 @@ window.onload = function() {
 
     file.onchange = function() {
         const files = this.files;
-        console.log('FILES[0]: ', files[0])
         audio.src = URL.createObjectURL(files[0]);
 
         canvas.width = window.innerWidth;
@@ -24,7 +23,6 @@ window.onload = function() {
 
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
-        console.log(dataArray)
 
         const WIDTH = canvas.width;
         const HEIGHT = canvas.height;
@@ -112,16 +110,14 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
 const xButtonState = {value: 1, max:5};
 const yButtonState = {value: 1, max:3};
 const modifyState = {value: 1, max:6}
-const blendState = {value: 1, max:3}
+const blendState = {value: 1, max:4}
 
 
 function changeButtonState(buttonState) {
     if (buttonState.value == buttonState.max) {
         return buttonState.value = 1;
     } else {
-        console.log(buttonState)
         return buttonState.value++;
-        
     }
 }
 
@@ -130,8 +126,11 @@ function changeBlendMode(blendState , ctx){
         return ctx.globalCompositeOperation = "source-over"
     } else if (blendState.value == 2) {
         return ctx.globalCompositeOperation = "color-burn"
-    } else {
+    } else if (blendState.value ==3) {
         return ctx.globalCompositeOperation = "difference"
+    } else {
+        return ctx.globalCompositeOperation = "soft-light"
+
     }
 }
 

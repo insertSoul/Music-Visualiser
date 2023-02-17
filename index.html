@@ -7,20 +7,25 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <input type="file" id="file-input" accept="audio">
+    <input class="inputButtons" type="file" id="file-input" accept="audio" style="font-family: '8BIT WONDER', 'JetBrains Mono'">
     <canvas id="canvas"></canvas>
     <audio id="audio" controls></audio>
-    <input type="range" min="1" max="100" value="25" id="sliderSize">
-    <input type="range" min="1" max="360" value="100" id="sliderColour">
-    <input type="range" min="1" max="80" value="20" id="attenuator">
-    <input type="range" min="1" max="100" value="100" id="attenuatorBars">
-    <input type="range" min="0" max="50"  value="2" id="fadeTime">
-    <input type="range" min="0" max="300" value="0" id="roundness">
-    
-    <button id="modifyButton">Modify</button>
-    <button id="blendButton">Blend mode</button>
-    <button id="xRepeatButton">X repeat</button>
-    <button id="yRepeatButton">Y repeat</button>
+    <div class="inputContainer">
+        <div class="sliderContainer">
+            <input class="inputs" type="range" min="1" max="100" value="25" id="sliderSize">
+            <input class="inputs" type="range" min="0" max="300" value="0" id="roundness">
+            <input class="inputs" type="range" min="1" max="80" value="20" id="attenuator">
+            <input class="inputs" type="range" min="1" max="64" value="100" id="attenuatorBars">
+            <input class="inputs" type="range" min="1" max="360" value="100" id="sliderColour">
+            <input class="inputs" type="range" min="0" max="50"  value="2" id="fadeTime">
+        </div>
+        <div class="buttonContainer">
+            <button class="inputs inputButtons" id="modifyButton">Modify</button>
+            <button class="inputs inputButtons" id="blendButton">Blend mode</button>
+            <button class="inputs inputButtons" id="xRepeatButton">X repeat</button>
+            <button class="inputs inputButtons" id="yRepeatButton">Y repeat</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
