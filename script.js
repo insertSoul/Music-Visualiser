@@ -55,7 +55,6 @@ window.onload = function() {
             requestAnimationFrame(renderFrame);
 
             analyser.getByteFrequencyData(dataArray);
-
             ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
@@ -72,36 +71,38 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
         shapeSaturation = (30 + attenuatorOutput + (dataArray[i]) % 80);
         
         if (modifyState.value == 1) {
-            ctx.fillStyle = `hsl(${(shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${60}%)`;
+            ctx.fillStyle = `hsla(${(shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${60}%, ${90}%) `;
             ctx.beginPath();
-            ctx.roundRect(WIDTH / 2 - shapeGrowth, HEIGHT / 2 - shapeGrowth, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+            ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth), Math.floor(HEIGHT / 2 - shapeGrowth), Math.floor(shapeGrowth * 2), Math.floor(shapeGrowth * 2), roundnessOutput);
             ctx.fill();
+            ctx.globalCompositeOperation = "color-burn";
         } else if (modifyState.value == 2) {
-            ctx.fillStyle = `hsl(${(i*shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${60}%)`;
+            ctx.fillStyle = `hsla(${(i*shapeColor + shapeSaturation) % 360}, ${shapeSaturation}%, ${60}%, ${90}%)`;
             ctx.beginPath();
-            ctx.roundRect(WIDTH / 2 - shapeGrowth, HEIGHT / 2 - shapeGrowth, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+            ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth), Math.floor(HEIGHT / 2 - shapeGrowth), Math.floor(shapeGrowth * 2), Math.floor(shapeGrowth * 2), roundnessOutput);
             ctx.fill();
+
         } else if (modifyState.value == 3) {
-            ctx.fillStyle = `hsl(${(i*shapeColor + i**2) % 360}, ${shapeSaturation+5*i}%, ${70}%)`;
+            ctx.fillStyle = `hsla(${(i*shapeColor + i**2) % 360}, ${shapeSaturation+5*i}%, ${70}%, ${90}%)`;
             ctx.beginPath();
-            ctx.roundRect(WIDTH / 2 - shapeGrowth * i, HEIGHT / 2 - shapeGrowth + 10*i, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+            ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth * i), Math.floor(HEIGHT / 2 - shapeGrowth + 10*i), Math.floor(shapeGrowth * 2, shapeGrowth * 2), roundnessOutput);
             ctx.fill();
         } else if (modifyState.value == 4) {
-            ctx.fillStyle = `hsl(${(shapeColor + (dataArray[i]% 40) /i) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
+            ctx.fillStyle = `hsla(${(shapeColor + (dataArray[i]% 40) /i) % 360}, ${shapeSaturation+5*i}%, ${50}%, ${90}%)`;
             ctx.beginPath();
-            ctx.roundRect(WIDTH / 2 - shapeGrowth * i + i, HEIGHT / 2 - shapeGrowth + 2**i - i, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
-            ctx.roundRect(WIDTH / 2 - shapeGrowth * -i - i, HEIGHT / 2 - shapeGrowth + 2**i - i, shapeGrowth * 2, shapeGrowth * 2, roundnessOutput);
+            ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth * i + i), Math.floor(HEIGHT / 2 - shapeGrowth + 2**i - i), Math.floor(shapeGrowth * 2), Math.floor(shapeGrowth * 2), roundnessOutput);
+            ctx.roundRect(Math.floor(WIDTH / 2 - shapeGrowth * -i - i), Math.floor(HEIGHT / 2 - shapeGrowth + 2**i - i), Math.floor(shapeGrowth * 2), Math.floor(shapeGrowth * 2), roundnessOutput);
 
             ctx.fill();
         } else if (modifyState.value == 5) {
-            ctx.fillStyle = `hsl(${(shapeColor + dataArray[5*i]%130) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
+            ctx.fillStyle = `hsla(${(shapeColor + dataArray[5*i]%130) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
             ctx.beginPath();
-            ctx.roundRect(WIDTH / 2 - (shapeGrowth +dataArray[i]%400) + 10*i, HEIGHT / 2 - (shapeGrowth +(dataArray[i]%400) + 10*i), (shapeGrowth * 2) + dataArray[i] %100, shapeGrowth * 2 + dataArray[i] %100, roundnessOutput);
+            ctx.roundRect(Math.floor(WIDTH / 2 - (shapeGrowth +dataArray[i]%400) + 10*i), Math.floor(HEIGHT / 2 - (shapeGrowth +(dataArray[i]%400) + 10*i)), Math.floor((shapeGrowth * 2) + dataArray[i] %100), Math.floor(shapeGrowth * 2 + dataArray[i] %100), roundnessOutput);
             ctx.fill();
         } else {
-            ctx.fillStyle = `hsl(${(shapeColor + dataArray[i]%160) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
+            ctx.fillStyle = `hsla(${(shapeColor + dataArray[i]%160) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
             ctx.beginPath();
-            ctx.roundRect(WIDTH / 2 - (shapeGrowth) + 10*i, HEIGHT / 2 - (shapeGrowth) + 10*i, (shapeGrowth * 2) + dataArray[i] %50, shapeGrowth * 2, roundnessOutput)
+            ctx.roundRect(Math.floor(WIDTH / 2 - (shapeGrowth) + 10*i), Math.floor(HEIGHT / 2 - (shapeGrowth) + 10*i), Math.floor((shapeGrowth * 2) + dataArray[i] %50), Math.floor(shapeGrowth * 2), roundnessOutput)
             ctx.fill();
         }
     }
