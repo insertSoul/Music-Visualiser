@@ -1,23 +1,24 @@
 *{
     font-family:"8BIT WONDER", "JetBrains Mono";
+    box-sizing: border-box;
 }
 body{
     background-color: black;
-    width: 100vh;
+    width: 100vw;
     height: 100vh;
 }
 #canvas{
     position: fixed;
     left: 20px;
-    top: 30px;
+    top: 34px;
     width: 98%;
-    height: 85%;
+    height: 82%;
 }
 audio{
     position: fixed;
-    padding: 10px;
     height: 40px;
-    bottom: 10px;
+    bottom: 27px;
+    left: 30px;
     z-index: 3;
 }
 .inputs{
@@ -28,43 +29,48 @@ audio{
 .inputContainer{
     position: fixed;
     z-index: 5;
-    bottom: 20px;
-    left: 350px;
-    gap: 5px;
+    bottom: 5px;
+    left: calc(350px + 10px);
+    width: calc(80vw - 160px);
+    min-width: 100px;
+    gap: 4px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     align-content: stretch;
-    margin-right:5px;
+    margin-right:20px;
 }
 .sliderContainer{
     display: flex;
     flex-wrap: wrap;
-    flex-grow: 1;
-    justify-content: space-around;
+    justify-content: center;
+    flex: 1;
 }
 .buttonContainer{
     display: flex;
-    gap: 10px;
-    flex-grow: 1;
     flex-wrap: wrap;
+    justify-content: center;
 }
 .inputButtons{
     border-radius: 5px;
     padding: 5px 10px;
-    flex-grow: 1;
-}
+    flex-basis: calc(50% - 30px);
+    margin: 0 15px;
+    max-width: 200px;
+    max-height: 30px;
+  }
 #file-input{
     position: fixed;
     z-index: 5;
 }
 
 input[type="range"] {
-    flex-grow: 1;
     -webkit-appearance: none;
-    margin-right: 15px;
-    min-width: 160px;
-    min-height: 26px;
+    flex-basis: calc(25% - 30px);
+    flex-grow: 1;
+    margin: 4px 15px;
+    min-width: 120px;
+    min-height: 16px;
     background: rgba(255, 255, 255, 0.6);
     border-radius: 50px;
     background-size: 100% 100%;
@@ -110,8 +116,40 @@ input[type="range"] {
 
 }
 #xRepeatButton{
+    background-image: linear-gradient(270deg, #51ea40, #a80d84 );
 }
 #yRepeatButton{
+    background-image: linear-gradient(90deg, #51ea40, #a80d84);
 }
-#modifyButton{}
-#blendButton{}
+#modifyButton{
+    background-image: linear-gradient(45deg,#150da8, #ff8000 );
+}
+#blendButton{
+    background-image: linear-gradient(270deg,#ff4500, #a80d84, #cbe029, #0d24a8  );
+}
+@media (max-width: 768px) {
+    .inputContainer {
+        width: calc(80vw - 280px);
+    }
+    input[type="range"] {
+        flex-grow: 1;
+        opacity: 0.7;
+        -webkit-appearance: none;
+        margin: 5px 15px;
+        min-width: 160px;
+        min-height: 26px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+}
+@media screen and (min-width: 768px) {
+    .inputButtons{
+      flex-basis: auto;
+      margin: 0 15px;
+      max-width: none;
+      padding: 5px 10px;
+    }
+  }
+
