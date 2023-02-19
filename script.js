@@ -19,7 +19,7 @@ window.onload = function() {
     
         src.connect(analyser);
         analyser.connect(audioCtx.destination);
-        analyser.fftSize = 32;
+        analyser.fftSize = 64;
 
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
