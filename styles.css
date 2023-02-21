@@ -51,6 +51,8 @@ audio{
     flex-wrap: wrap;
     justify-content: center;
 }
+.lFOContainer{
+}
 .inputButtons{
     border-radius: 5px;
     padding: 5px 10px;

@@ -19,6 +19,7 @@ window.onload = function() {
     
         src.connect(analyser);
         analyser.connect(audioCtx.destination);
+        analyser.smoothingTimeConstant = 0.85;
         analyser.fftSize = 64;
 
         const bufferLength = analyser.frequencyBinCount;
@@ -43,6 +44,9 @@ window.onload = function() {
         const attenuatorBars = document.getElementById("attenuatorBars");
         const fadeTime = document.getElementById("fadeTime")
         const roundnessSlider = document.getElementById("roundness")
+        const depthLFOSlider = document.getElementById("depthLFO")
+        const rateLFOSlider = document.getElementById("rateLFO")
+
         
         function renderFrame() {
 
