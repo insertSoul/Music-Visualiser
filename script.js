@@ -56,7 +56,6 @@ window.onload = function() {
             sliderColourLFOBox: false    
         }
         
-        
         const sliderSizeLFOBox = document.querySelector("#sliderSizeLFO")
         const roundnessLFOBox = document.querySelector("#roundnessLFO")
         const attenuatorBarsLFOBox = document.querySelector("#attenuatorBarsLFO")
@@ -65,10 +64,6 @@ window.onload = function() {
         const sliderColourLFOBox = document.querySelector("#sliderColourLFO")
 
 
-
-
-        
-        
         function renderFrame() {
 
             let sizeSliderOutput = sizeSlider.value;
@@ -78,11 +73,12 @@ window.onload = function() {
             let fadeTimeOutput = (fadeTime.value)/100;
             let roundnessOutput = roundnessSlider.value;
             let depthLFOOutput = depthLFOSlider.value/5;
-            let rateLFOOutput = rateLFOSlider.value/20;
+            let rateLFOOutput = rateLFOSlider.value/200;
             
             const timeInSeconds = Date.now() / 1000;
             //Outputs a changing value the user can control
             const sineWaveValue = ((Math.sin(2 * Math.PI * rateLFOOutput * timeInSeconds))*depthLFOOutput);
+            console.log(sineWaveValue)
 
 
             requestAnimationFrame(renderFrame);
@@ -91,9 +87,11 @@ window.onload = function() {
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
             
             //When pressing LFO assignment button it will update the object that can be referenced inside of draw shape
-            sliderSizeLFOBox.addEventListener('change', () => {
-            lfoCheckBoxStates.sliderSizeLFOBox = sliderSizeLFOBox.checked;
-          });
+            sliderSizeLFOBox.addEventListener('change', () => lfoCheckBoxStates.sliderSizeLFOBox = sliderSizeLFOBox.checked);
+            roundnessLFOBox.addEventListener('change', () => lfoCheckBoxStates.roundnessLFOBox = roundnessLFOBox.checked);
+            attenuatorBarsLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorBarsLFOBox = attenuatorBarsLFOBox.checked);
+            sliderColourLFOBox.addEventListener('change', () => lfoCheckBoxStates.sliderColourLFOBox = sliderColourLFOBox.checked);
+
 
             drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT)
             ctx.globalCompositeOperation = "source-over";
@@ -103,14 +101,30 @@ window.onload = function() {
     }
 }
 function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT) {
+    // adjust amount of shapes (barsoutput)
+    if (lfoCheckBoxStates.attenuatorBarsLFOBox == true) {
+        barsOutput = Math.floor((barsOutput * Math.abs(sineWaveValue))%36);
+    } else {
+        barsOutput = barsOutput;
+    }
+
     for (let i = 0; i < barsOutput; i++) {
-        //shapeGrowth = (dataArray[i] * attenuatorOutput + (sizeSliderOutput * 1.7));
+
         if (lfoCheckBoxStates.sliderSizeLFOBox == true) {
             shapeGrowth = (dataArray[i] * attenuatorOutput + (sizeSliderOutput * 1.7)) * sineWaveValue;
         } else {
             shapeGrowth = (dataArray[i] * attenuatorOutput + (sizeSliderOutput * 1.7));
         }
-        shapeColor = (colourSliderOutput);
+        if (lfoCheckBoxStates.roundnessLFOBox == true){
+            roundnessOutput =  Math.floor((Math.abs(sineWaveValue)*40)%300);
+        } else {
+            roundnessOutput = roundnessOutput;
+        }
+        if (lfoCheckBoxStates.sliderColourLFOBox == true) {
+            shapeColor = colourSliderOutput + Math.floor(Math.abs(sineWaveValue))*20
+        } else {
+            shapeColor = (colourSliderOutput);
+        }
         shapeSaturation = (30 + attenuatorOutput + (dataArray[i]) % 80);
         
         if (modifyState.value == 1) {
@@ -209,6 +223,7 @@ function RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSl
     for (let i = 1; i <= xButtonState.value; i++) {
         if (xButtonState.value == 1) {
             drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT);
+            changeBlendMode(blendState, ctx);
         } else if (xButtonState.value == 2) {
             if (i == 1) {
                 drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, ((WIDTH + (WIDTH / 2) - sizeSliderOutput / 2) - sizeSliderOutput / 2), HEIGHT);
