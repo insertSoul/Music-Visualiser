@@ -90,7 +90,7 @@ window.onload = function() {
             ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
             
-            //When pressing 
+            //When pressing LFO assignment button it will update the object that can be referenced inside of draw shape
             sliderSizeLFOBox.addEventListener('change', () => {
             lfoCheckBoxStates.sliderSizeLFOBox = sliderSizeLFOBox.checked;
           });
@@ -184,12 +184,14 @@ function repeatInY(yButtonState, xButtonState, barsOutput, dataArray, attenuator
     for (let i = 1; i <= yButtonState.value; i++) {
         if (yButtonState.value == 1) {
             RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT);
+            changeBlendMode(blendState, ctx);
         } else if (yButtonState.value == 2) {
             if (i == 1) {
                 RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, ((HEIGHT + HEIGHT / 2) - sizeSliderOutput / 2));
             } else if (i = 2) {
                 RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, (HEIGHT / 2) - sizeSliderOutput / 2);
             }
+            changeBlendMode(blendState, ctx);
         } else if (yButtonState.value == 3) {
             if (i == 1) {
                 RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT);
@@ -198,8 +200,8 @@ function repeatInY(yButtonState, xButtonState, barsOutput, dataArray, attenuator
             } else if (i == 3) {
                 RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, ((HEIGHT / 3) - sizeSliderOutput / 2));
             }
+            changeBlendMode(blendState, ctx);
         } 
-        changeBlendMode(blendState, ctx);
     } 
 }
 
@@ -221,6 +223,7 @@ function RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSl
             } else {
                 drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, ((WIDTH / 3) - sizeSliderOutput / 2), HEIGHT);
             }
+            changeBlendMode(blendState, ctx);
         } else if (xButtonState.value == 4) {
             if (i == 1) {
                 drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, ((WIDTH / 4) - sizeSliderOutput / 2), HEIGHT);
@@ -243,7 +246,8 @@ function RepeatInX(xButtonState, barsOutput, dataArray, attenuatorOutput, sizeSl
             } else {
                 drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, (WIDTH + (4 * WIDTH / 5) - sizeSliderOutput / 2), HEIGHT);
             }
+            changeBlendMode(blendState, ctx);
         }
     } 
-    changeBlendMode(blendState, ctx);
+    //changeBlendMode(blendState, ctx);
 }
