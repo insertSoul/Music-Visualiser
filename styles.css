@@ -52,6 +52,7 @@ audio{
     justify-content: center;
 }
 .lFOContainer{
+    background-color: #05081c;
 }
 .inputButtons{
     border-radius: 5px;
@@ -96,6 +97,16 @@ input[type="range"] {
     border: none;
     background: transparent;
   }
+  input[type="checkbox" i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    margin-left: -8px;
+    margin-right: 8px;
+    padding:0%;
+    border: initial;
+}
 
 #sliderSize{
     background-image: linear-gradient(45deg, #ff4500, #0d6a67);
