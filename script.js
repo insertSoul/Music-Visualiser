@@ -78,8 +78,6 @@ window.onload = function() {
             const timeInSeconds = Date.now() / 1000;
             //Outputs a changing value the user can control
             const sineWaveValue = ((Math.sin(2 * Math.PI * rateLFOOutput * timeInSeconds))*depthLFOOutput);
-            console.log(sineWaveValue)
-
 
             requestAnimationFrame(renderFrame);
             analyser.getByteFrequencyData(dataArray);
@@ -91,25 +89,33 @@ window.onload = function() {
             roundnessLFOBox.addEventListener('change', () => lfoCheckBoxStates.roundnessLFOBox = roundnessLFOBox.checked);
             attenuatorBarsLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorBarsLFOBox = attenuatorBarsLFOBox.checked);
             sliderColourLFOBox.addEventListener('change', () => lfoCheckBoxStates.sliderColourLFOBox = sliderColourLFOBox.checked);
+            attenuatorLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorLFOBox = attenuatorLFOBox.checked);
+
 
 
             drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT)
             ctx.globalCompositeOperation = "source-over";
+
         }
         audio.play();
         renderFrame();
     }
 }
 function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT) {
-    // adjust amount of shapes (barsoutput)
+    // adjust amount of shapes (barsOutput)
     if (lfoCheckBoxStates.attenuatorBarsLFOBox == true) {
-        barsOutput = Math.floor((barsOutput * Math.abs(sineWaveValue))%36);
+        barsOutput = ((barsOutput * Math.abs(sineWaveValue))%36);
     } else {
         barsOutput = barsOutput;
     }
 
     for (let i = 0; i < barsOutput; i++) {
-
+        //Set modifiers if lfo is assained or not
+        if(lfoCheckBoxStates.attenuatorLFOBox == true) {
+            attenuatorOutput = (attenuatorOutput + (Math.abs(sineWaveValue) % 5) % 10) / 4
+        } else {
+            attenuatorOutput = attenuatorOutput
+        }
         if (lfoCheckBoxStates.sliderSizeLFOBox == true) {
             shapeGrowth = (dataArray[i] * attenuatorOutput + (sizeSliderOutput * 1.7)) * sineWaveValue;
         } else {
@@ -121,7 +127,7 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
             roundnessOutput = roundnessOutput;
         }
         if (lfoCheckBoxStates.sliderColourLFOBox == true) {
-            shapeColor = colourSliderOutput + Math.floor(Math.abs(sineWaveValue))*20
+            shapeColor = colourSliderOutput + (Math.abs(sineWaveValue))*40
         } else {
             shapeColor = (colourSliderOutput);
         }
