@@ -79,7 +79,16 @@ window.onload = function() {
             //Outputs a changing value the user can control
             const sineWaveValue = ((Math.sin(2 * Math.PI * rateLFOOutput * timeInSeconds))*depthLFOOutput);
 
+
             requestAnimationFrame(renderFrame);
+
+            if (lfoCheckBoxStates.fadeTimeLFOBox == true) {
+                fadeTimeOutput = ((fadeTimeOutput + (sineWaveValue))%2)/10;
+            } else {
+                fadeTimeOutput = fadeTimeOutput;
+            }
+            console.log(fadeTimeOutput);
+
             analyser.getByteFrequencyData(dataArray);
             ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -90,6 +99,8 @@ window.onload = function() {
             attenuatorBarsLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorBarsLFOBox = attenuatorBarsLFOBox.checked);
             sliderColourLFOBox.addEventListener('change', () => lfoCheckBoxStates.sliderColourLFOBox = sliderColourLFOBox.checked);
             attenuatorLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorLFOBox = attenuatorLFOBox.checked);
+            fadeTimeLFOBox.addEventListener('change', () => lfoCheckBoxStates.fadeTimeLFOBox = fadeTimeLFOBox.checked);
+
 
 
 
