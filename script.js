@@ -3,6 +3,15 @@ window.onload = function() {
     const file = document.getElementById('file-input')
     const canvas = document.getElementById('canvas')
 
+    document.addEventListener('keydown', function(event){
+        if (event.key === 'm') {
+            const inputControls = document.querySelector('.inputContainer')
+            inputControls.classList.toggle('inputContainerTransparent')
+            console.log('test')
+        }
+    })
+
+
 
 
     file.onchange = function() {
@@ -87,7 +96,6 @@ window.onload = function() {
             } else {
                 fadeTimeOutput = fadeTimeOutput;
             }
-            console.log(fadeTimeOutput);
 
             analyser.getByteFrequencyData(dataArray);
             ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;

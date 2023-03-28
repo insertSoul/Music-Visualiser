@@ -40,6 +40,9 @@ audio{
     align-content: stretch;
     margin-right:20px;
 }
+.inputContainerTransparent{
+    opacity: 0%;
+}
 .sliderContainer{
     display: flex;
     flex-wrap: wrap;
@@ -55,7 +58,8 @@ audio{
     background-color: #05081c;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
+    gap: 90px;
     height: 20px;
 }
 .inputButtons{
