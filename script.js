@@ -18,8 +18,8 @@ window.onload = function() {
         const files = this.files;
         audio.src = URL.createObjectURL(files[0]);
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = (window.innerWidth/1.2);
+        canvas.height = (window.innerHeight/1.2);
         const ctx = canvas.getContext('2d');
 
         const audioCtx = new AudioContext();
@@ -75,7 +75,7 @@ window.onload = function() {
 
         function renderFrame() {
 
-            let sizeSliderOutput = sizeSlider.value;
+            let sizeSliderOutput = sizeSlider.value/2;
             let colourSliderOutput = colourSlider.value;
             let attenuatorOutput = attenuator.value/30;
             let barsOutput = attenuatorBars.value;
