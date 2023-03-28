@@ -18,8 +18,8 @@ window.onload = function() {
         const files = this.files;
         audio.src = URL.createObjectURL(files[0]);
 
-        canvas.width = (window.innerWidth/1.2);
-        canvas.height = (window.innerHeight/1.2);
+        canvas.width = (window.innerWidth/1.3);
+        canvas.height = (window.innerHeight/1.3);
         const ctx = canvas.getContext('2d');
 
         const audioCtx = new AudioContext();

@@ -17,7 +17,7 @@ body{
 audio{
     position: fixed;
     height: 40px;
-    bottom: 44px;
+    bottom: 36px;
     left: 30px;
     z-index: 3;
 }
@@ -33,7 +33,7 @@ audio{
     left: calc(350px + 10px);
     width: calc(80vw - 160px);
     min-width: 100px;
-    gap: 4px;
+    gap: 2px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -55,12 +55,9 @@ audio{
     justify-content: center;
 }
 .lFOContainer{
-    background-color: #05081c;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    gap: 90px;
-    height: 20px;
 }
 .inputButtons{
     border-radius: 5px;
@@ -73,6 +70,7 @@ audio{
 #file-input{
     position: fixed;
     z-index: 5;
+    top: 2px;
 }
 
 input[type="range"] {
@@ -183,7 +181,7 @@ input[type="checkbox"]:checked {
         -webkit-appearance: none;
         margin: 5px 15px;
         min-width: 160px;
-        min-height: 26px;
+        min-height: 14px;
         background: rgba(255, 255, 255, 0.6);
         border-radius: 50px;
         background-size: 100% 100%;
