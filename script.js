@@ -6,8 +6,11 @@ window.onload = function() {
     document.addEventListener('keydown', function(event){
         if (event.key === 'm') {
             const inputControls = document.querySelector('.inputContainer')
+            const audio = document.querySelector('#audio')
+            const inputButtons = document.querySelector('.inputButtons')
             inputControls.classList.toggle('inputContainerTransparent')
-            console.log('test')
+            audio.classList.toggle('inputContainerTransparent')
+            inputButtons.classList.toggle('inputContainerTransparent')
         }
     })
 
