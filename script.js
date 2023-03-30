@@ -21,8 +21,8 @@ window.onload = function() {
         const files = this.files;
         audio.src = URL.createObjectURL(files[0]);
 
-        canvas.width = (window.innerWidth/1.3);
-        canvas.height = (window.innerHeight/1.3);
+        canvas.width = (window.innerWidth/1.5);
+        canvas.height = (window.innerHeight/1.5);
         const ctx = canvas.getContext('2d');
 
         const audioCtx = new AudioContext();
@@ -132,7 +132,7 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
     }
 
     for (let i = 0; i < barsOutput; i++) {
-        //Set modifiers if lfo is assained or not
+        //Set modifiers if lfo is assigned or not
         if(lfoCheckBoxStates.attenuatorLFOBox == true) {
             attenuatorOutput = (attenuatorOutput + (Math.abs(sineWaveValue) % 5) % 10) / 4
             if (attenuatorOutput >= 8) {
@@ -152,7 +152,7 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
             roundnessOutput = roundnessOutput;
         }
         if (lfoCheckBoxStates.sliderColourLFOBox == true) {
-            shapeColor = colourSliderOutput + (Math.abs(sineWaveValue))*40
+            shapeColor = colourSliderOutput * ((Math.abs(sineWaveValue))*4)
         } else {
             shapeColor = (colourSliderOutput);
         }
@@ -174,15 +174,15 @@ function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput
             ctx.roundRect(~~(WIDTH / 2 - shapeGrowth * i), ~~(HEIGHT / 2 - shapeGrowth + 10*i), ~~(shapeGrowth * 2), ~~(shapeGrowth * 2), roundnessOutput);
             ctx.fill();
         } else if (modifyState.value == 4) {
-            ctx.fillStyle = `hsla(${(shapeColor + (dataArray[i]% 40) /i) % 360}, ${shapeSaturation+5*i}%, ${50}%, ${90}%)`;
+            ctx.fillStyle = `hsla(${(shapeColor + (dataArray[i]% 40) /i) % 360}, ${shapeSaturation+5*i / shapeColor}%, ${50}%, ${90}%)`;
             ctx.beginPath();
             ctx.roundRect(~~(WIDTH / 2 - shapeGrowth * i + i), ~~(HEIGHT / 2 - shapeGrowth + 2**i - i), ~~(shapeGrowth * 2), ~~(shapeGrowth * 2), roundnessOutput);
-            ctx.roundRect(~~(WIDTH / 2 - shapeGrowth * -i - i), ~~(HEIGHT / 2 - shapeGrowth + 2**i - i), ~~(shapeGrowth * 2), ~~(shapeGrowth * 2), roundnessOutput);
+            ctx.roundRect(~~(WIDTH / 2 - shapeGrowth * -i + i), ~~(HEIGHT / 2 - shapeGrowth + 2**i - i), ~~(shapeGrowth * 2), ~~(shapeGrowth * 2), roundnessOutput);
             ctx.fill();
         } else if (modifyState.value == 5) {
             ctx.fillStyle = `hsla(${(shapeColor + dataArray[5*i]%130) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
             ctx.beginPath();
-            ctx.roundRect(~~(WIDTH / 2 - (shapeGrowth +dataArray[i]%400) + 10*i), ~~(HEIGHT / 2 - (shapeGrowth +(dataArray[i]%400) + 10*i)), ~~((shapeGrowth * 2) + dataArray[i] %100), ~~(shapeGrowth * 2 + dataArray[i] %100), roundnessOutput);
+            ctx.roundRect(~~(WIDTH / 2 - (shapeGrowth +dataArray[i]%400) + 10*i), ~~(HEIGHT /1.5 - (shapeGrowth +(dataArray[i]%400) + 10*i)), ~~((shapeGrowth * 2) + dataArray[i] %100), ~~(shapeGrowth * 2 + dataArray[i] %100), roundnessOutput);
             ctx.fill();
         } else {
             ctx.fillStyle = `hsla(${(shapeColor + dataArray[i]%160) % 360}, ${shapeSaturation+5*i}%, ${50}%)`;
