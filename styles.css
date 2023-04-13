@@ -71,6 +71,11 @@ audio{
     z-index: 4;
     box-shadow: #722115 10px 6px 30px 4px, #1acc55 0px 0px 5px 1px, #703370 0px 0px 0px 0px;
 }
+#mic-access{
+    position: fixed;
+    top: 8px;
+    left: 110px;
+}
 #file-input{
     position: fixed;
     z-index: 5;
@@ -194,6 +199,9 @@ input[type="checkbox"]:checked {
         background-size: 100% 100%;
         background-repeat: no-repeat;
       }
+      #mic-access{
+        font-size: xx-small;
+    }
 }
 @media screen and (min-width: 768px) {
     .inputButtons{

@@ -1,128 +1,163 @@
-window.onload = function() {
-    const audio = document.getElementById('audio');
-    const file = document.getElementById('file-input')
-    const canvas = document.getElementById('canvas')
+const audio = document.getElementById('audio');
+const file = document.getElementById('file-input')
+const canvas = document.getElementById('canvas')
+const micButton = document.getElementById('mic-access')
 
-    document.addEventListener('keydown', function(event){
-        if (event.key === 'm') {
-            const inputControls = document.querySelector('.inputContainer')
-            const audio = document.querySelector('#audio')
-            const inputButtons = document.querySelector('.inputButtons')
-            inputControls.classList.toggle('inputContainerTransparent')
-            audio.classList.toggle('inputContainerTransparent')
-            inputButtons.classList.toggle('inputContainerTransparent')
-        }
-    })
+ 
+
+// minimize ui on m key press
+document.addEventListener('keydown', function(event){
+    if (event.key === 'm') {
+        const inputControls = document.querySelector('.inputContainer')
+        const audio = document.querySelector('#audio')
+        const inputButtons = document.querySelector('.inputButtons')
+        inputControls.classList.toggle('inputContainerTransparent')
+        audio.classList.toggle('inputContainerTransparent')
+        inputButtons.classList.toggle('inputContainerTransparent')
+    }
+})
+
+// File selection code
+file.onchange = function() {
+    const files = this.files;
+    audio.src = URL.createObjectURL(files[0]);
+
+    startVisualizer();
+};
+
+// Microphone input code
+let mediaStream;
+
+micButton.onclick = async function startMicrophone() {
+    try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audio.srcObject = mediaStream;
+        startVisualizer();
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+function startVisualizer() {
 
 
+    canvas.width = (window.innerWidth/1.5);
+    canvas.height = (window.innerHeight/1.5);
+
+  
+    let audioCtx = new AudioContext();
+    let analyser = audioCtx.createAnalyser();
+  
+    // Check if the mediaStream is valid before creating the source node
+    if (mediaStream) {
+      const src = audioCtx.createMediaStreamSource(mediaStream);
+      src.connect(analyser);
+    } else {
+      const src = audioCtx.createMediaElementSource(audio);
+      src.connect(analyser);
+    }
+  
+    analyser.connect(audioCtx.destination);
+    analyser.smoothingTimeConstant = 0.85;
+    analyser.fftSize = 64;
+  
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
 
 
-    file.onchange = function() {
-        const files = this.files;
-        audio.src = URL.createObjectURL(files[0]);
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
 
-        canvas.width = (window.innerWidth/1.5);
-        canvas.height = (window.innerHeight/1.5);
+    const xRepeatButton = document.querySelector("#xRepeatButton");
+    const yRepeatButton = document.querySelector("#yRepeatButton");
+    const modifyButton = document.querySelector("#modifyButton");
+    const blendButton = document.querySelector('#blendButton')
+    xRepeatButton.addEventListener('click', () => {changeButtonState(xButtonState)});
+    yRepeatButton.addEventListener('click', () => {changeButtonState(yButtonState)});
+    modifyButton.addEventListener('click', () => {changeButtonState(modifyState)});
+    blendButton.addEventListener('click', () => {changeButtonState(blendState)});
+
+
+    const sizeSlider = document.getElementById("sliderSize");
+    const colourSlider = document.getElementById("sliderColour");
+    const attenuator = document.getElementById("attenuator");
+    const attenuatorBars = document.getElementById("attenuatorBars");
+    const fadeTime = document.getElementById("fadeTime")
+    const roundnessSlider = document.getElementById("roundness")
+    const depthLFOSlider = document.getElementById("depthLFO")
+    const rateLFOSlider = document.getElementById("rateLFO")
+
+    const lfoCheckBoxStates = {
+        sliderSizeLFOBox: false,
+        roundnessLFOBox: false,
+        attenuatorBarsLFOBox: false,
+        fadeTimeLFOBox: false,
+        attenuatorLFOBox: false,
+        sliderColourLFOBox: false    
+    }
+    
+    const sliderSizeLFOBox = document.querySelector("#sliderSizeLFO")
+    const roundnessLFOBox = document.querySelector("#roundnessLFO")
+    const attenuatorBarsLFOBox = document.querySelector("#attenuatorBarsLFO")
+    const fadeTimeLFOBox = document.querySelector("#fadeTimeLFO")
+    const attenuatorLFOBox = document.querySelector("#attenuatorLFO")
+    const sliderColourLFOBox = document.querySelector("#sliderColourLFO")
+
+
+    function renderFrame() {
+
         const ctx = canvas.getContext('2d');
 
-        const audioCtx = new AudioContext();
-        let src = audioCtx.createMediaElementSource(audio);
-        const analyser = audioCtx.createAnalyser();
-    
-        src.connect(analyser);
-        analyser.connect(audioCtx.destination);
-        analyser.smoothingTimeConstant = 0.85;
-        analyser.fftSize = 64;
-
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-
-        const WIDTH = canvas.width;
-        const HEIGHT = canvas.height;
-
-        const xRepeatButton = document.querySelector("#xRepeatButton");
-        const yRepeatButton = document.querySelector("#yRepeatButton");
-        const modifyButton = document.querySelector("#modifyButton");
-        const blendButton = document.querySelector('#blendButton')
-        xRepeatButton.addEventListener('click', () => {changeButtonState(xButtonState)});
-        yRepeatButton.addEventListener('click', () => {changeButtonState(yButtonState)});
-        modifyButton.addEventListener('click', () => {changeButtonState(modifyState)});
-        blendButton.addEventListener('click', () => {changeButtonState(blendState)});
-
-
-        const sizeSlider = document.getElementById("sliderSize");
-        const colourSlider = document.getElementById("sliderColour");
-        const attenuator = document.getElementById("attenuator");
-        const attenuatorBars = document.getElementById("attenuatorBars");
-        const fadeTime = document.getElementById("fadeTime")
-        const roundnessSlider = document.getElementById("roundness")
-        const depthLFOSlider = document.getElementById("depthLFO")
-        const rateLFOSlider = document.getElementById("rateLFO")
-
-        const lfoCheckBoxStates = {
-            sliderSizeLFOBox: false,
-            roundnessLFOBox: false,
-            attenuatorBarsLFOBox: false,
-            fadeTimeLFOBox: false,
-            attenuatorLFOBox: false,
-            sliderColourLFOBox: false    
-        }
+        let sizeSliderOutput = sizeSlider.value/2;
+        let colourSliderOutput = colourSlider.value;
+        let attenuatorOutput = attenuator.value/30;
+        let barsOutput = attenuatorBars.value;
+        let fadeTimeOutput = (fadeTime.value)/100;
+        let roundnessOutput = roundnessSlider.value;
+        let depthLFOOutput = depthLFOSlider.value/5;
+        let rateLFOOutput = rateLFOSlider.value/200;
         
-        const sliderSizeLFOBox = document.querySelector("#sliderSizeLFO")
-        const roundnessLFOBox = document.querySelector("#roundnessLFO")
-        const attenuatorBarsLFOBox = document.querySelector("#attenuatorBarsLFO")
-        const fadeTimeLFOBox = document.querySelector("#fadeTimeLFO")
-        const attenuatorLFOBox = document.querySelector("#attenuatorLFO")
-        const sliderColourLFOBox = document.querySelector("#sliderColourLFO")
+        const timeInSeconds = Date.now() / 1000;
+        //Outputs a changing value the user can control depth and speed of.
+        const sineWaveValue = ((Math.sin(2 * Math.PI * rateLFOOutput * timeInSeconds))*depthLFOOutput);
 
 
-        function renderFrame() {
+        requestAnimationFrame(renderFrame);
+        console.log(sizeSliderOutput)
 
-            let sizeSliderOutput = sizeSlider.value/2;
-            let colourSliderOutput = colourSlider.value;
-            let attenuatorOutput = attenuator.value/30;
-            let barsOutput = attenuatorBars.value;
-            let fadeTimeOutput = (fadeTime.value)/100;
-            let roundnessOutput = roundnessSlider.value;
-            let depthLFOOutput = depthLFOSlider.value/5;
-            let rateLFOOutput = rateLFOSlider.value/200;
-            
-            const timeInSeconds = Date.now() / 1000;
-            //Outputs a changing value the user can control
-            const sineWaveValue = ((Math.sin(2 * Math.PI * rateLFOOutput * timeInSeconds))*depthLFOOutput);
-
-
-            requestAnimationFrame(renderFrame);
-
-            if (lfoCheckBoxStates.fadeTimeLFOBox == true) {
-                fadeTimeOutput = ((fadeTimeOutput + (sineWaveValue))%2)/10;
-            } else {
-                fadeTimeOutput = fadeTimeOutput;
-            }
-
-            analyser.getByteFrequencyData(dataArray);
-            ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;
-            ctx.fillRect(0, 0, WIDTH, HEIGHT);
-            
-            //When pressing LFO assignment button it will update the object that can be referenced inside of draw shape
-            sliderSizeLFOBox.addEventListener('change', () => lfoCheckBoxStates.sliderSizeLFOBox = sliderSizeLFOBox.checked);
-            roundnessLFOBox.addEventListener('change', () => lfoCheckBoxStates.roundnessLFOBox = roundnessLFOBox.checked);
-            attenuatorBarsLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorBarsLFOBox = attenuatorBarsLFOBox.checked);
-            sliderColourLFOBox.addEventListener('change', () => lfoCheckBoxStates.sliderColourLFOBox = sliderColourLFOBox.checked);
-            attenuatorLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorLFOBox = attenuatorLFOBox.checked);
-            fadeTimeLFOBox.addEventListener('change', () => lfoCheckBoxStates.fadeTimeLFOBox = fadeTimeLFOBox.checked);
-
-
-
-
-            drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT)
-            ctx.globalCompositeOperation = "source-over";
-
+        if (lfoCheckBoxStates.fadeTimeLFOBox == true) {
+            fadeTimeOutput = ((fadeTimeOutput + (sineWaveValue))%2)/10;
+        } else {
+            fadeTimeOutput = fadeTimeOutput;
         }
-        audio.play();
-        renderFrame();
+
+        analyser.getByteFrequencyData(dataArray);
+        ctx.fillStyle = `rgba(0,0,0,${fadeTimeOutput})`;
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        
+        //When pressing LFO assignment button it will update the object that can be referenced inside of draw shape
+        sliderSizeLFOBox.addEventListener('change', () => lfoCheckBoxStates.sliderSizeLFOBox = sliderSizeLFOBox.checked);
+        roundnessLFOBox.addEventListener('change', () => lfoCheckBoxStates.roundnessLFOBox = roundnessLFOBox.checked);
+        attenuatorBarsLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorBarsLFOBox = attenuatorBarsLFOBox.checked);
+        sliderColourLFOBox.addEventListener('change', () => lfoCheckBoxStates.sliderColourLFOBox = sliderColourLFOBox.checked);
+        attenuatorLFOBox.addEventListener('change', () => lfoCheckBoxStates.attenuatorLFOBox = attenuatorLFOBox.checked);
+        fadeTimeLFOBox.addEventListener('change', () => lfoCheckBoxStates.fadeTimeLFOBox = fadeTimeLFOBox.checked);
+
+
+
+
+        drawShapes (xButtonState, yButtonState, barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput, modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT)
+        ctx.globalCompositeOperation = "source-over";
+
     }
+    if (mediaStream) {
+        audio.play();
+      }
+    renderFrame();
 }
+
+  
 function drawRectangle(barsOutput, dataArray, attenuatorOutput, sizeSliderOutput, colourSliderOutput, roundnessOutput,  modifyState, sineWaveValue, lfoCheckBoxStates, ctx, WIDTH, HEIGHT) {
     // adjust amount of shapes (barsOutput)
     if (lfoCheckBoxStates.attenuatorBarsLFOBox == true) {
