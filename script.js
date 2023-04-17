@@ -11,9 +11,11 @@ document.addEventListener('keydown', function(event){
         const inputControls = document.querySelector('.inputContainer')
         const audio = document.querySelector('#audio')
         const inputButtons = document.querySelector('.inputButtons')
+        const micAccessButton = document.querySelector('#mic-access')
         inputControls.classList.toggle('inputContainerTransparent')
         audio.classList.toggle('inputContainerTransparent')
         inputButtons.classList.toggle('inputContainerTransparent')
+        micAccessButton.classList.toggle('inputContainerTransparent')
     }
 })
 
