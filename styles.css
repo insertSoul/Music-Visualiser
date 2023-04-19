@@ -74,12 +74,12 @@ audio{
 #mic-access{
     position: fixed;
     top: 8px;
-    left: 110px;
+    left: 339px;
 }
 #file-input{
     position: fixed;
     z-index: 5;
-    top: 8px;
+    top: 26px;
     width: 80px;
     padding: 0px;
     box-shadow: #722115 10px 6px 30px 4px, #1acc55 0px 0px 5px 4px, #703370 0px 0px 20px 12px;
@@ -211,4 +211,25 @@ input[type="checkbox"]:checked {
       padding: 5px 10px;
     }
   }
-
+input[type="file"] {
+    display: none;
+}   
+.custom-file-input{
+    position: fixed;
+    top: 8px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    flex-basis: calc(50% - 30px);
+    margin: 0 15px;
+    max-height: 30px;
+    z-index: 4;
+    box-shadow: #722115 10px 6px 30px 4px, #1acc55 0px 0px 5px 1px, #703370 0px 0px 0px 0px;
+    background-color: white;
+    font-size: small;
+    border-width: 2px;
+    background-color: buttonface;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+    color: buttontext;
+}
